@@ -2,9 +2,9 @@
 
 SilverStripe module to store assets in S3 rather than on the local filesystem.
 
-Note: This is a pre-release module, and does not currently implement any kind of
-bucket policy for protected assets. It is up to you to implement this yourself
-using AWS bucket policy.
+Note: This module does not currently implement any kind of bucket policy for 
+protected assets. It is up to you to implement this yourself using AWS 
+bucket policy.
 
 ## Environment setup
 
@@ -18,6 +18,25 @@ If running outside of an EC2 instance it will be necessary to specify an API key
 
 * `AWS_ACCESS_KEY_ID`: Your AWS access key that has access to the bucket you want to access
 * `AWS_SECRET_ACCESS_KEY`: Your AWS secret corresponding to the access key
+
+**Example YML Config when running outside of EC2:**
+```yml
+---
+Only:
+envvarset: AWS_BUCKET_NAME
+After:
+- '#assetsflysystem'
+---
+SilverStripe\Core\Injector\Injector:
+Aws\S3\S3Client:
+  constructor:
+    configuration:
+      region: '`AWS_REGION`'
+      version: latest
+      credentials:
+        key: '`AWS_ACCESS_KEY_ID`'
+        secret: '`AWS_SECRET_ACCESS_KEY`'
+```
 
 ## Installation
 
@@ -52,33 +71,30 @@ both public and protected files. Protected files will be streamed from AWS, so t
 not need to be accessed by users directly. Therefore, something similar to the following
 bucket policy may be useful.
 
-Make sure you replace `<bucket-name>` and `<your-ARN>` below with the appropriate values.
-`<your-ARN>` should match the IAM arn of the ec2 instance running your SilverStripe site.
+Make sure you replace `<bucket-name>` below with the appropriate values.
 
 **Note:** The below policy has not been extensively tested - feedback welcome.
 
-```
+```json
 {
-    "Version": "2012-10-17",
-    "Id": "AccessForPublicAssetsAndPassthruForProtectedAssets",
-    "Statement": [
-        {
-            "Sid": "AllowAccessToPublicAssets",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::<bucket-name>/public/*"
-        },
-        {
-            "Sid": "ServerFullAccess",
-            "Effect": "Allow",
-            "Principal": {"AWS":"<your-ARN>"},
-            "Action": ["s3:GetObject", "s3:DeleteObject", "s3:PutObject"],
-            "Resource": "arn:aws:s3:::<bucket-name>/*"
-        }
-    ]
+    "Policy": {
+		"Version":"2012-10-17",
+		"Statement":[
+			{
+				"Sid":"AddPerm",
+				"Effect":"Allow",
+				"Principal":"*",
+				"Action":"s3:GetObject",
+				"Resource":"arn:aws:s3:::<bucket-name>/public/*"
+			}
+		]
+	}
 }
 ```
+
+## For developers
+
+Read [Setting up a local sandbox for developing the Silverstripe S3 module](doc/en/setting-local-dev-environment.md) if you wish to do some local development.
 
 ## Uninstalling
 
