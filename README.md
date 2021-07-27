@@ -38,6 +38,31 @@ Aws\S3\S3Client:
         secret: '`AWS_SECRET_ACCESS_KEY`'
 ```
 
+**Example YML Config when running CDN for S3:**
+```yml
+---
+Only:
+envvarset: AWS_BUCKET_NAME
+After:
+- '#assetsflysystem'
+---
+SilverStripe\Core\Injector\Injector:
+Aws\S3\S3Client:
+  constructor:
+    configuration:
+      region: '`AWS_REGION`'
+      version: latest
+      endpoint: '`AWS_CDN`'
+      bucket_endpoint: true
+      credentials:
+        key: '`AWS_ACCESS_KEY_ID`'
+        secret: '`AWS_SECRET_ACCESS_KEY`'
+```
+Make sure that you have the CDN URL under alternate domain names in your cloudfront distribution and the the A record for it has been set up pointing to your distribution.
+
+Make sure your alternate domain name has an SSL certificate.
+
+
 ## Installation
 
 * Define the environment variables listed above.
