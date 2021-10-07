@@ -51,14 +51,4 @@ SilverStripe\Core\Injector\Injector:
     constructor:
       adapter: '%$SilverStripe\S3\Adapter\ProtectedAdapter'
       cache: '%$League\Flysystem\Cached\Storage\Adapter.protected'
-#---
-Name: silverstripes3-assetscore
-Only:
-  envvarset: AWS_BUCKET_NAME
-After:
-  - '#assetscore'
----
-SilverStripe\Core\Injector\Injector:
-  # Define our SS asset backend
-  SilverStripe\Assets\Storage\AssetStore:
-    class: SilverStripe\Assets\Flysystem\FlysystemAssetStore
+
