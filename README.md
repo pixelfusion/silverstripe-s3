@@ -11,7 +11,7 @@ bucket policy.
 Run this
 
 ```
-composer install pixelfusion/silverstripe-s3
+composer require pixelfusion/silverstripe-s3
 ```
 
 ## Environment setup
