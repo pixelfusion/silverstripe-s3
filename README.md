@@ -6,6 +6,14 @@ Note: This module does not currently implement any kind of bucket policy for
 protected assets. It is up to you to implement this yourself using AWS 
 bucket policy.
 
+## Installation
+
+Run this
+
+```
+composer install pixelfusion/silverstripe-s3
+```
+
 ## Environment setup
 
 The module requires a few environment variables to be set. Full details can
@@ -123,4 +131,4 @@ Read [Setting up a local sandbox for developing the Silverstripe S3 module](doc/
 
 ## Uninstalling
 
-* Run `composer remove silverstripe/s3` to remove the module.
+* Run `composer remove pixelfusion/silverstripe-s3` to remove the module.
